@@ -26,9 +26,21 @@ use smallvec::{Array, SmallVec};
 /// A `String`-like container that can store a small number of bytes inline.
 ///
 /// `SmallString` uses a `SmallVec<[u8; N]>` as its internal storage.
-#[derive(Clone, Default)]
+#[derive(Default)]
 pub struct SmallString<A: Array<Item = u8>> {
     data: SmallVec<A>,
+}
+
+impl<A: Array<Item = u8>> Clone for SmallString<A> {
+    fn clone(&self) -> Self {
+        Self {
+            data: self.data.clone(),
+        }
+    }
+
+    fn clone_from(&mut self, source: &Self) {
+        self.data.clone_from(&source.data);
+    }
 }
 
 impl<A: Array<Item = u8>> SmallString<A> {
